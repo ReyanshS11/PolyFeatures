@@ -101,9 +101,16 @@ def calculate_sidechain_features(smiles):
 def calculate_other_features(smiles):
     features = {'SMILES': smiles, 'num_hbond_donors': 0.0, 'num_hbond_acceptors': 0.0, 'num_spiro_atoms': 0.0, 'num_bridgehead_atoms': 0.0, 'no_atom_count': 0.0}
     
+    mol, star_indices = process_polymer_smiles(smiles)
+    if mol is None:
+        return features
+    
+    backbone_atoms = identify_backbone_atoms(mol, star_indices)
+    sidechain_atoms = set(range(mol.GetNumAtoms())) - backbone_atoms
+
     hbond_donor_count = Lipinski.NumHDonors(mol)
     hbond_acc_count = Lipinski.NumHAcceptors(mol)
-    spiro_count = Lipinksi.NumSpiroAtoms(mol)
+    spiro_count = Lipinski.NumSpiroAtoms(mol)
     bh_count = Lipinski.NumBridgeheadAtoms(mol)
     no_count = Lipinski.NOCount(mol)
     

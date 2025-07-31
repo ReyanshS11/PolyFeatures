@@ -31,4 +31,4 @@ def analyze_polymers(smiles_list, n_jobs=-1):
     other_results = pd.DataFrame(other_results).set_index('SMILES')
     
     x = pd.concat([backbone_results, sidechain_results], axis=1)
-    return pd.concat([x, other_results] axis=1)
+    return pd.concat([x, other_results], axis=1)
