@@ -21,10 +21,12 @@ print(features)
 backbone_length
 backbone_aromatic_fraction
 backbone_heavy_atom_count
-backbone_polar_atom_count
+backbone_electronegative_count
 sidechain_length
 sidechain_heavy_atom_count
 sidechain_branch_count
-sidechain_polar_atom_count
+sidechain_electronegative_count
 num_hbond_donors
+num_hbond_acceptors
+no_atom_count
 ```
