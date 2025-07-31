@@ -18,10 +18,9 @@ setup(
     author_email="<reyansh.saindane@gmail.com>",
     description=DESCRIPTION,
     packages=find_packages(),
-    install_requires=['rdkit', 'networkx', 'joblib', 'tqdm', 'multiprocessing', 'pandas'],
+    install_requires=['rdkit', 'networkx', 'joblib', 'tqdm', 'multiprocessing', 'pandas', 'numpy', 'matplotlib'],
     keywords=['python'],
     classifiers=[
-        "Development Status :: 1 - Planning",
         "Intended Audience :: Developers",
         "Programming Language :: Python :: 3",
         "Operating System :: Unix",
