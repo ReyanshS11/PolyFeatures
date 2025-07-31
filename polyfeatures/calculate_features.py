@@ -23,7 +23,7 @@ def identify_backbone_atoms(mol, star_indices):
         return set(range(mol.GetNumAtoms()))
 
 def calculate_backbone_features(smiles):
-    features = {'SMILES': smiles, 'backbone_length': 0.0, 'backbone_aromatic_fraction': 0.0, 'backbone_heavy_atom_count': 0.0, 'backbone_polar_atom_count': 0.0}
+    features = {'SMILES': smiles, 'backbone_length': 0.0, 'backbone_aromatic_fraction': 0.0, 'backbone_heavy_atom_count': 0.0, 'backbone_electronegative_count': 0.0}
     
     mol, star_indices = process_polymer_smiles(smiles)
     if mol is None:
@@ -33,7 +33,7 @@ def calculate_backbone_features(smiles):
     
     aromatic_count = 0
     backbone_heavy_count = 0
-    polar_atoms = 0
+    en_count = 0
 
     for idx in backbone_atoms:
         atom = mol.GetAtomWithIdx(idx)
@@ -44,20 +44,20 @@ def calculate_backbone_features(smiles):
 
     for idx in backbone_atoms:
         atom = mol.GetAtomWithIdx(idx)
-        if atom.GetSymbol() in ('O', 'N', 'F', 'Cl', 'Br', 'S'):
-            polar_atoms += 1   
+        if atom.GetSymbol() in ('O', 'N', 'F', 'Cl'):
+            en_count += 1   
     
     if backbone_heavy_count > 0:
         features['backbone_aromatic_fraction'] = aromatic_count / backbone_heavy_count
         features['backbone_heavy_atom_count'] = backbone_heavy_count
 
-    features['backbone_polar_atom_count'] = polar_atoms
+    features['backbone_electronegative_count'] = en_count
     features['backbone_length'] = len(backbone_atoms)
     
     return features
 
 def calculate_sidechain_features(smiles):
-    features = {'SMILES': smiles, 'sidechain_length': 0.0, 'sidechain_heavy_atom_count': 0.0, 'sidechain_branch_count': 0.0, 'sidechain_polar_atom_count': 0.0}
+    features = {'SMILES': smiles, 'sidechain_length': 0.0, 'sidechain_heavy_atom_count': 0.0, 'sidechain_branch_count': 0.0, 'sidechain_electronegative_count': 0.0}
     
     mol, star_indices = process_polymer_smiles(smiles)
     if mol is None:
@@ -68,7 +68,7 @@ def calculate_sidechain_features(smiles):
 
     sidechain_heavy_count = 0
     hbond_donor_count = 0
-    polar_atoms = 0
+    en_count = 0
 
     for idx in sidechain_atoms:
         atom = mol.GetAtomWithIdx(idx)
@@ -88,18 +88,18 @@ def calculate_sidechain_features(smiles):
 
     for idx in sidechain_atoms:
         atom = mol.GetAtomWithIdx(idx)
-        if atom.GetSymbol() in ('O', 'N', 'F', 'Cl', 'Br', 'S'):
-            polar_atoms += 1
+        if atom.GetSymbol() in ('O', 'N', 'F', 'Cl'):
+            en_count += 1
             
     features['sidechain_heavy_atom_count'] = sidechain_heavy_count
     features['sidechain_branch_count'] = sidechain_branches
     features['sidechain_length'] = len(sidechain_atoms)
-    features['sidechain_polar_atom_count'] = polar_atoms
+    features['sidechain_electronegative_count'] = en_count
 
     return features
 
-def calculate_other_features(smiles):
-    features = {'SMILES': smiles, 'num_hbond_donors': 0.0, 'num_hbond_acceptors': 0.0, 'num_spiro_atoms': 0.0, 'num_bridgehead_atoms': 0.0, 'no_atom_count': 0.0}
+def calculate_extra_features(smiles):
+    features = {'SMILES': smiles, 'num_hbond_donors': 0.0, 'num_hbond_acceptors': 0.0, 'no_atom_count': 0.0}
     
     mol, star_indices = process_polymer_smiles(smiles)
     if mol is None:
@@ -110,14 +110,10 @@ def calculate_other_features(smiles):
 
     hbond_donor_count = Lipinski.NumHDonors(mol)
     hbond_acc_count = Lipinski.NumHAcceptors(mol)
-    spiro_count = Lipinski.NumSpiroAtoms(mol)
-    bh_count = Lipinski.NumBridgeheadAtoms(mol)
     no_count = Lipinski.NOCount(mol)
     
     features['num_hbond_donors'] = hbond_donor_count
     features['num_hbond_acceptors'] = hbond_acc_count
-    features['num_spiro_atoms'] = spiro_count
-    features['num_bridgehead_atoms'] = bh_count
     features['no_atom_count'] = no_count
 
     return features

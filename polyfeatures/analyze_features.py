@@ -8,7 +8,7 @@ from joblib import Parallel, delayed
 from tqdm.auto import tqdm
 import multiprocessing
 
-from calculate_features import calculate_backbone_features, calculate_sidechain_features, calculate_other_features
+from calculate_features import calculate_backbone_features, calculate_sidechain_features, calculate_extra_features
 
 def analyze_polymers(smiles_list, n_jobs=-1):
     if n_jobs == -1:
@@ -22,13 +22,13 @@ def analyze_polymers(smiles_list, n_jobs=-1):
         delayed(calculate_sidechain_features)(smiles) for smiles in tqdm(smiles_list)
     )
 
-    other_results = Parallel(n_jobs=n_jobs)(
-        delayed(calculate_other_features)(smiles) for smiles in tqdm(smiles_list)
+    extra_results = Parallel(n_jobs=n_jobs)(
+        delayed(calculate_extra_features)(smiles) for smiles in tqdm(smiles_list)
     )
 
     backbone_results = pd.DataFrame(backbone_results).set_index('SMILES')
     sidechain_results = pd.DataFrame(sidechain_results).set_index('SMILES')
-    other_results = pd.DataFrame(other_results).set_index('SMILES')
+    extra_results = pd.DataFrame(extra_results).set_index('SMILES')
     
     x = pd.concat([backbone_results, sidechain_results], axis=1)
-    return pd.concat([x, other_results], axis=1)
+    return pd.concat([x, extra_results], axis=1)
