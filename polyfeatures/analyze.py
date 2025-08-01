@@ -8,7 +8,7 @@ from joblib import Parallel, delayed
 from tqdm.auto import tqdm
 import multiprocessing
 
-from calculate_features import calculate_backbone_features, calculate_sidechain_features, calculate_extra_features
+from polyfeatures.calculate_features import calculate_backbone_features, calculate_sidechain_features, calculate_extra_features
 
 def analyze_polymers(smiles_list, n_jobs=-1):
     if n_jobs == -1:

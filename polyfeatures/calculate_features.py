@@ -8,7 +8,7 @@ from joblib import Parallel, delayed
 from tqdm.auto import tqdm
 import multiprocessing
 
-from processing import process_polymer_smiles
+from polyfeatures.processing import process_polymer_smiles
 
 def identify_backbone_atoms(mol, star_indices):
     if len(star_indices) < 2:
