@@ -4,10 +4,10 @@ import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-with codecs.open("C:/Reyansh/Python/Github Projects/PolyFeatures/polyfeatures/README.md", encoding="utf-8") as fh:
+with codecs.open("C:/Reyansh/Python/Github Projects/PolyFeatures-main/README.md", encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = '0.0.1'
+VERSION = '0.0.10'
 DESCRIPTION = 'Package for featurizing polymers.'
 
 # Setting up
@@ -18,7 +18,7 @@ setup(
     author_email="<reyansh.saindane@gmail.com>",
     description=DESCRIPTION,
     packages=find_packages(),
-    install_requires=['rdkit', 'networkx', 'joblib', 'tqdm', 'multiprocessing', 'pandas', 'numpy', 'matplotlib'],
+    install_requires=['rdkit', 'networkx', 'joblib', 'tqdm', 'pandas', 'numpy', 'matplotlib'],
     keywords=['python'],
     classifiers=[
         "Intended Audience :: Developers",
