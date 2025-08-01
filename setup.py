@@ -7,7 +7,7 @@ here = os.path.abspath(os.path.dirname(__file__))
 with codecs.open("C:/Reyansh/Python/Github Projects/PolyFeatures-main/README.md", encoding="utf-8") as fh:
     long_description = "\n" + fh.read()
 
-VERSION = '0.0.10'
+VERSION = '0.0.20'
 DESCRIPTION = 'Package for featurizing polymers.'
 
 # Setting up
