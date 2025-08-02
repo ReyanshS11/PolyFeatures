@@ -1,4 +1,4 @@
-# PolyFeatures: Featurizer for Backbone and Sidechain Polymer Features
+# PolyFeatures: Polymer Featurizer
 
 ## Installation
 ```
