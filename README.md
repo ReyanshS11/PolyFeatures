@@ -27,6 +27,5 @@ sidechain_heavy_atom_count
 sidechain_branch_count
 sidechain_electronegative_count
 num_hbond_donors
-num_hbond_acceptors
 no_atom_count
 ```
