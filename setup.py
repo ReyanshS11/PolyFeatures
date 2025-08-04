@@ -4,7 +4,7 @@ import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-VERSION = '0.0.21'
+VERSION = '0.0.22'
 DESCRIPTION = 'A python package for featurizing polymers.'
 
 # Setting up
@@ -15,7 +15,7 @@ setup(
     author_email="<reyansh.saindane@gmail.com>",
     description=DESCRIPTION,
     packages=find_packages(),
-    install_requires=['rdkit', 'networkx', 'joblib', 'tqdm', 'pandas', 'numpy', 'matplotlib'],
+    install_requires=['rdkit', 'networkx', 'joblib', 'tqdm', 'pandas', 'numpy'],
     keywords=['python'],
     classifiers=[
         "Intended Audience :: Developers",

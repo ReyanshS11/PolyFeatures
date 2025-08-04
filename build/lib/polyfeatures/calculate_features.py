@@ -1,6 +1,7 @@
 from rdkit import Chem
-from rdkit.Chem.rdMolDescriptors import CalcNumRotatableBonds
+from rdkit.Chem.Descriptors import CalcMolDescriptors
 from rdkit.Chem import Lipinski
+import numpy as np
 
 import pandas as pd
 import networkx as nx
@@ -9,6 +10,31 @@ from tqdm.auto import tqdm
 import multiprocessing
 
 from polyfeatures.processing import process_polymer_smiles
+
+from rdkit import Chem
+
+def get_backbone_rotatable_bonds(smiles, backbone_idx):
+    mol = Chem.MolFromSmiles(smiles)
+
+    rot_bond_smarts = "[!$(*#*)&!D1]-!@[!$(*#*)&!D1]"
+    rot_bond_query = Chem.MolFromSmarts(rot_bond_smarts)
+
+    rotatable_bond_matches = mol.GetSubstructMatches(rot_bond_query)
+
+    rotatable_bond_ids = set()
+    for a1, a2 in rotatable_bond_matches:
+        bond = mol.GetBondBetweenAtoms(a1, a2)
+        if bond:
+            rotatable_bond_ids.add(bond.GetIdx())
+
+    backbone_rotatable_bonds = []
+    for bond_id in rotatable_bond_ids:
+        bond = mol.GetBondWithIdx(bond_id)
+        a1, a2 = bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()
+        if a1 in backbone_idx and a2 in backbone_idx:
+            backbone_rotatable_bonds.append(bond_id)
+
+    return len(backbone_rotatable_bonds)
 
 def identify_backbone_atoms(mol, star_indices):
     if len(star_indices) < 2:
@@ -23,7 +49,7 @@ def identify_backbone_atoms(mol, star_indices):
         return set(range(mol.GetNumAtoms()))
 
 def calculate_backbone_features(smiles):
-    features = {'SMILES': smiles, 'backbone_length': 0.0, 'backbone_aromatic_fraction': 0.0, 'backbone_heavy_atom_count': 0.0, 'backbone_electronegative_count': 0.0}
+    features = {'SMILES': smiles, 'backbone_length': 0.0, 'backbone_aromatic_fraction': 0.0, 'backbone_heavy_atom_count': 0.0, 'backbone_electronegative_count': 0.0, 'backbone_flexibility_index': 0.0}
     
     mol, star_indices = process_polymer_smiles(smiles)
     if mol is None:
@@ -45,11 +71,14 @@ def calculate_backbone_features(smiles):
     for idx in backbone_atoms:
         atom = mol.GetAtomWithIdx(idx)
         if atom.GetSymbol() in ('O', 'N', 'F', 'Cl'):
-            en_count += 1   
-    
+            en_count += 1
+
+    num_rota = get_backbone_rotatable_bonds(smiles, backbone_atoms)
+
     if backbone_heavy_count > 0:
         features['backbone_aromatic_fraction'] = aromatic_count / backbone_heavy_count
         features['backbone_heavy_atom_count'] = backbone_heavy_count
+        features['backbone_flexibility_index'] = num_rota / backbone_heavy_count
 
     features['backbone_electronegative_count'] = en_count
     features['backbone_length'] = len(backbone_atoms)
@@ -99,19 +128,14 @@ def calculate_sidechain_features(smiles):
     return features
 
 def calculate_extra_features(smiles):
-    features = {'SMILES': smiles, 'num_hbond_donors': 0.0, 'no_atom_count': 0.0}
+    features = {'SMILES': smiles}
     
     mol, star_indices = process_polymer_smiles(smiles)
     if mol is None:
         return features
     
-    backbone_atoms = identify_backbone_atoms(mol, star_indices)
-    sidechain_atoms = set(range(mol.GetNumAtoms())) - backbone_atoms
+    extra_features = CalcMolDescriptors(mol)
 
-    hbond_donor_count = Lipinski.NumHDonors(mol)
-    no_count = Lipinski.NOCount(mol)
-    
-    features['num_hbond_donors'] = hbond_donor_count
-    features['no_atom_count'] = no_count
+    features.update(extra_features)
 
     return features

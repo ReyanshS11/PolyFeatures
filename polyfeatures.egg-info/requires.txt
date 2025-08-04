@@ -4,4 +4,3 @@ joblib
 tqdm
 pandas
 numpy
-matplotlib

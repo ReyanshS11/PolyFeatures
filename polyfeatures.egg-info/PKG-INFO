@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: polyfeatures
-Version: 0.0.21
+Version: 0.0.22
 Summary: A python package for featurizing polymers.
 Author: Reyansh Saindane
 Author-email: <reyansh.saindane@gmail.com>
@@ -17,7 +17,6 @@ Requires-Dist: joblib
 Requires-Dist: tqdm
 Requires-Dist: pandas
 Requires-Dist: numpy
-Requires-Dist: matplotlib
 Dynamic: author
 Dynamic: author-email
 Dynamic: classifier
