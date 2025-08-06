@@ -82,7 +82,7 @@ def calculate_backbone_features(smiles):
 
     features['backbone_electronegative_count'] = en_count
     features['backbone_length'] = len(backbone_atoms)
-    
+
     return features
 
 def calculate_sidechain_features(smiles):
@@ -96,7 +96,6 @@ def calculate_sidechain_features(smiles):
     sidechain_atoms = set(range(mol.GetNumAtoms())) - backbone_atoms
 
     sidechain_heavy_count = 0
-    hbond_donor_count = 0
     en_count = 0
 
     for idx in sidechain_atoms:
@@ -128,6 +127,25 @@ def calculate_sidechain_features(smiles):
     return features
 
 def calculate_extra_features(smiles):
+    features = {'SMILES': smiles, 'sp3_count': 0.0, 'sp2_count': 0.0}
+
+    mol = Chem.MolFromSmiles(smiles)
+    
+    sp3 = 0
+    sp2 = 0
+    
+    for atom in mol.GetAtoms():
+        if atom.GetHybridization() == Chem.rdchem.HybridizationType.SP3:
+            sp3 += 1
+        if atom.GetHybridization() == Chem.rdchem.HybridizationType.SP2:
+            sp2 += 1
+
+    features['sp3_count'] = sp3
+    features['sp2_count'] = sp2
+
+    return features
+
+def calculate_descriptors(smiles):
     features = {'SMILES': smiles}
     
     mol, star_indices = process_polymer_smiles(smiles)

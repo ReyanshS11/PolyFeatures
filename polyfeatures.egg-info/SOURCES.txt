@@ -4,6 +4,7 @@ setup.py
 polyfeatures/__init__.py
 polyfeatures/analyze.py
 polyfeatures/calculate_features.py
+polyfeatures/polyfeatures-testing.py
 polyfeatures/processing.py
 polyfeatures.egg-info/PKG-INFO
 polyfeatures.egg-info/SOURCES.txt
