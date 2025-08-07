@@ -22,10 +22,13 @@ backbone_length
 backbone_aromatic_fraction
 backbone_heavy_atom_count
 backbone_electronegative_count
+backbone_flexibility_index
 sidechain_length
 sidechain_heavy_atom_count
 sidechain_branch_count
 sidechain_electronegative_count
-num_hbond_donors
-no_atom_count
+sp3_count
+sp2_count
++
+results from CalcAllDescriptors()
 ```
