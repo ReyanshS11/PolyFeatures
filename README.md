@@ -1,4 +1,4 @@
-# PolyFeatures: Polymer Featurizer
+# PolyFeatures
 
 ## Installation
 ```
@@ -33,18 +33,16 @@ sp2_count
 results from CalcMolDescriptors()
 ```
 
-## Functions
+# Functions
 
-### processing
-```process_polymer_smiles(smiles)```
+## processing
+* ```process_polymer_smiles(smiles)```
 
-### calculate_features
-```
-calculate_backbone_features(smiles)
-calculate_sidechain_features(smiles)
-calculate_extra_features(smiles)
-calculate_descriptors(smiles)
-```
+## calculate_features
+* ```calculate_backbone_features(smiles)```
+* ```calculate_sidechain_features(smiles)```
+* ```calculate_extra_features(smiles)```
+* ```calculate_descriptors(smiles)```
 
-### analyze
-```analyze_polymers(smiles_list, extra_features=True, rdkit_descriptors=True, n_jobs=-1)```
+## analyze
+* ```analyze_polymers(smiles_list, extra_features=True, rdkit_descriptors=True, n_jobs=-1)```
