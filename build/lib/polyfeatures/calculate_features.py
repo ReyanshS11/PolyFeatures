@@ -13,29 +13,6 @@ from polyfeatures.processing import process_polymer_smiles
 
 from rdkit import Chem
 
-def get_backbone_rotatable_bonds(smiles, backbone_idx):
-    mol = Chem.MolFromSmiles(smiles)
-
-    rot_bond_smarts = "[!$(*#*)&!D1]-!@[!$(*#*)&!D1]"
-    rot_bond_query = Chem.MolFromSmarts(rot_bond_smarts)
-
-    rotatable_bond_matches = mol.GetSubstructMatches(rot_bond_query)
-
-    rotatable_bond_ids = set()
-    for a1, a2 in rotatable_bond_matches:
-        bond = mol.GetBondBetweenAtoms(a1, a2)
-        if bond:
-            rotatable_bond_ids.add(bond.GetIdx())
-
-    backbone_rotatable_bonds = []
-    for bond_id in rotatable_bond_ids:
-        bond = mol.GetBondWithIdx(bond_id)
-        a1, a2 = bond.GetBeginAtomIdx(), bond.GetEndAtomIdx()
-        if a1 in backbone_idx and a2 in backbone_idx:
-            backbone_rotatable_bonds.append(bond_id)
-
-    return len(backbone_rotatable_bonds)
-
 def identify_backbone_atoms(mol, star_indices):
     if len(star_indices) < 2:
         # No clear backbone ends, assume whole molecule is backbone
@@ -73,7 +50,7 @@ def calculate_backbone_features(smiles):
         if atom.GetSymbol() in ('O', 'N', 'F', 'Cl'):
             en_count += 1
 
-    num_rota = get_backbone_rotatable_bonds(smiles, backbone_atoms)
+    num_rota = calculate_descriptors(smiles)['NumRotatableBonds']
 
     if backbone_heavy_count > 0:
         features['backbone_aromatic_fraction'] = aromatic_count / backbone_heavy_count

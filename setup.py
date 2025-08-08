@@ -4,7 +4,7 @@ import os
 
 here = os.path.abspath(os.path.dirname(__file__))
 
-VERSION = '0.0.24'
+VERSION = '0.0.25'
 DESCRIPTION = 'A python package for featurizing polymers.'
 
 # Setting up
