@@ -30,5 +30,21 @@ sidechain_electronegative_count
 sp3_count
 sp2_count
 +
-results from CalcAllDescriptors()
+results from CalcMolDescriptors()
 ```
+
+## Functions
+
+# processing
+```process_polymer_smiles(smiles)```
+
+# calculate_features
+```
+calculate_backbone_features(smiles)
+calculate_sidechain_features(smiles)
+calculate_extra_features(smiles)
+calculate_descriptors(smiles)
+```
+
+# analyze
+```analyze_polymers(smiles_list, extra_features=True, rdkit_descriptors=True, n_jobs=-1)```
