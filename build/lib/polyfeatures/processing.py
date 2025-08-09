@@ -12,7 +12,7 @@ def process_polymer_smiles(smiles):
     """Remove [*] atoms and identify backbone connection points."""
     mol = Chem.MolFromSmiles(smiles)
     if mol is None:
-        return None, []
+        raise ValueError('mol object cannot be inferred, check smiles strings')
     
     star_neighbors = []
     editable_mol = Chem.RWMol(mol)
@@ -32,5 +32,12 @@ def process_polymer_smiles(smiles):
     for orig_idx in star_neighbors:
         adjustment = sum(1 for removed_idx in atoms_to_remove if removed_idx < orig_idx)
         adjusted_neighbors.append(orig_idx - adjustment)
+
+    try:
+        mol = editable_mol.GetMol()
+        Chem.SanitizeMol(mol)
+        editable_mol = Chem.RWMol(mol)
+    except Exception as e:
+        editable_mol = editable_mol
     
     return editable_mol.GetMol(), list(set(adjusted_neighbors))

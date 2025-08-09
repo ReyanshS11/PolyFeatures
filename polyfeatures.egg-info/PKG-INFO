@@ -1,6 +1,6 @@
 Metadata-Version: 2.4
 Name: polyfeatures
-Version: 0.0.25
+Version: 0.0.28
 Summary: A python package for featurizing polymers.
 Author: Reyansh Saindane
 Author-email: <reyansh.saindane@gmail.com>
